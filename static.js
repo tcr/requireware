@@ -22,8 +22,17 @@
   }
 
   var require = function (path) {
-    return require.exports[path] || (require.exports[path] = window.eval(require.content[path] || "null"));
-  }
+    if (require.exports[path]) {
+      return require.exports[path];
+    }
+    if (require.content[path] == null) {
+      if (!path.match(/\.js$/)) {
+        return require(path + '.js');
+      }
+      throw new Error('Error: Cannot find module ' + JSON.stringify(path));
+    }
+    return require.exports[path] = window.eval(require.content[path] || "null");
+  };
   require.exports = {};
   var onready = promise();
   require._isReady = function () {
@@ -49,7 +58,6 @@
 
   // Load sources.
   var els = document.getElementsByTagName('script'), el = els[els.length - 1];
-  console.log(el.src);
   require.remote(el.src + '?source', onready.deliver);
   // Load inner script content
   var text = el.innerText || '';

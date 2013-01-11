@@ -4,6 +4,7 @@ var express = require('express')
 var app = express()
 
 // Artificial delay
+/*
 app.use(function (req, res, next) {
   if (req.path.match(/^\/scripts/) && 'source' in req.query) {
     setTimeout(next, 3000);
@@ -11,6 +12,7 @@ app.use(function (req, res, next) {
     next();
   }
 });
+*/
 
 app.use('/scripts', requireware(__dirname + '/static/scripts'))
 app.use(express.static(__dirname + '/static'));
