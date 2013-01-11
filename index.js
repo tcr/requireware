@@ -1,7 +1,8 @@
 var fs = require('fs')
   , path = require('path')
   , send = require('send')
-  , wrench = require("wrench");
+  , wrench = require("wrench")
+  , url = require('url');
 
 function codifyJSON (obj) {
   return JSON.stringify(obj).replace(/\*/g, '\\*').replace(/\//g, '\\/');
@@ -19,9 +20,10 @@ module.exports = function requireware () {
           wrench.readdirSyncRecursive(localbase)
             .forEach(function (filename) {
               var file = path.join(localbase, filename);
-              var localpath = path.join(req.path, filename);
               if (fs.statSync(file).isFile()) {
-                scripts[localpath.replace(/^\//, '')] = '(function () { var exports={}; ' + fs.readFileSync(file, 'utf-8') + '\nreturn exports; })()\n//@ sourceURL=' + localpath;
+                var localpath = path.join(req.path, filename);
+                var scripturl = (req.header('X-Forwarded-Protocol') || 'http') + '://' + req.header('host') + path.join(url.parse(req.originalUrl).pathname, localpath);
+                scripts[localpath.replace(/^\//, '')] = '(function () { var exports={}; ' + fs.readFileSync(file, 'utf-8') + '\nreturn exports; })()\n//@ sourceURL=' + scripturl;
               }
             });
         });
