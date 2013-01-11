@@ -18,9 +18,10 @@ module.exports = function requireware () {
           var localbase = path.join(base, path.join('/', req.path));
           wrench.readdirSyncRecursive(localbase)
             .forEach(function (filename) {
-              file = path.join(localbase, filename);
+              var file = path.join(localbase, filename);
+              var localpath = path.join(req.path, filename);
               if (fs.statSync(file).isFile()) {
-                scripts[path.join(req.path, filename).replace(/^\//, '')] = '(function () { var exports={}; ' + fs.readFileSync(file, 'utf-8') + '\nreturn exports; })()\n//@ sourceURL=' + file;
+                scripts[localpath.replace(/^\//, '')] = '(function () { var exports={}; ' + fs.readFileSync(file, 'utf-8') + '\nreturn exports; })()\n//@ sourceURL=' + localpath;
               }
             });
         });
