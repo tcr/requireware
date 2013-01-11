@@ -1,6 +1,6 @@
 # requireware
 
-Middleware to provide simple asynchronous require() in the browser.
+Simple middleware to provide asynchronous require() script loading in the browser.
 
 Intended to easily 
 

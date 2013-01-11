@@ -1,7 +1,7 @@
 {
   "name": "requireware",
-  "version": "0.0.1-1",
-  "description": "Middleware to provide simple asynchronous require() in the browser.",
+  "version": "0.0.1-2",
+  "description": "Simple middleware to provide asynchronous require() script loading in the browser.",
   "main": "index.js",
   "directories": {
     "test": "test"
