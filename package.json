@@ -1,0 +1,16 @@
+{
+  "name": "requireware",
+  "version": "0.0.1",
+  "description": "Middleware to provide simple asynchronous require() in the browser.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "~3.0.6",
+    "send": "~0.1.0"
+  },
+  "repository": "https://github.com/tcr/requireware",
+  "author": "Tim Cameron Ryan",
+  "license": "MIT"
+}

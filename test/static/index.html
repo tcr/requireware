@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>requireware test</title>
+    <script src="/scripts">
+
+require('jquery');
+var EventEmitter = require('events').EventEmitter;
+
+var dom = new EventEmitter();
+dom.on('data', function (data) {
+  alert(data);
+});
+dom.emit('data', 'Requireware!');
+
+$('body').append('<p>jQuery loaded.</p>');
+
+    </script>
+  </head>
+  <body>
+    <h1>Requireware test</h1>
+    <p>Some content that should be loaded first...</p>
+  </body>
+</html>
