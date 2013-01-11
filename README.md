@@ -2,8 +2,6 @@
 
 Simple middleware to provide asynchronous require() script loading in the browser.
 
-Intended to easily 
-
 ```javascript
 var express = require('express')
   , requireware = require('requireware');
