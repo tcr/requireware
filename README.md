@@ -1,4 +1,4 @@
-# requireware
+# <img src="http://game-icons.net/icons/lorc/originals/png/jigsaw-piece.png" width="32"> requireware
 
 Simple middleware to provide asynchronous require() script loading in the browser.
 

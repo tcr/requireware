@@ -10,11 +10,13 @@ var EventEmitter = require('events').EventEmitter;
 
 var dom = new EventEmitter();
 dom.on('data', function (data) {
-  alert(data);
+  console.log(data);
 });
-dom.emit('data', 'Requireware!');
+dom.emit('data', 'Requireware loaded!');
 
 $('body').append('<p>jQuery loaded.</p>');
+
+require('error');
 
     </script>
   </head>
