@@ -20,6 +20,11 @@ module.exports = function requireware () {
           var localbase = path.join(base, path.join('/', req.path));
           wrench.readdirSyncRecursive(localbase)
             .forEach(function (filename) {
+              // Only accept valid filenames ending in .js
+              if (!filename.match(/\.js$/)) {
+                return;
+              }
+
               var file = path.join(localbase, filename);
               if (fs.statSync(file).isFile()) {
                 var localpath = path.join(req.path, filename);
