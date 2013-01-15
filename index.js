@@ -4,7 +4,7 @@ var fs = require('fs')
   , wrench = require("wrench")
   , url = require('url')
   , UglifyJS = require("uglify-js")
-  , temp = require('temp');
+  , Tempfile = require('temporary/lib/file');
 
 function codifyJSON (obj) {
   return JSON.stringify(obj).replace(/\*/g, '\\*').replace(/\//g, '\\/');
@@ -12,7 +12,7 @@ function codifyJSON (obj) {
 
 module.exports = function requireware () {
   var bases = Array.prototype.slice.call(arguments);
-  var cache = temp.openSync('requireware'), cached = false;
+  var cache = new Tempfile(), cached = false;
 
   function refresh (req) {
     var scripts = {};
@@ -41,7 +41,7 @@ module.exports = function requireware () {
           }
         });
     });
-    fs.writeFileSync(cache.path, 'require && (require.content = (' + codifyJSON(scripts) + ')) && require._isReady(' + JSON.stringify(req.path) + ');', 'utf-8');
+    cache.writeFileSync('require && (require.content = (' + codifyJSON(scripts) + ')) && require._isReady(' + JSON.stringify(req.path) + ');', 'utf-8');
   }
 
   return function (req, res, next) {
