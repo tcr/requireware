@@ -4,7 +4,8 @@ var fs = require('fs')
   , wrench = require("wrench")
   , url = require('url')
   , UglifyJS = require("uglify-js")
-  , Tempfile = require('temporary/lib/file');
+  , temp = require('temp')
+  , watchTree = require("fs-watch-tree").watchTree;
 
 function codifyJSON (obj) {
   return JSON.stringify(obj).replace(/\*/g, '\\*').replace(/\//g, '\\/');
@@ -12,9 +13,11 @@ function codifyJSON (obj) {
 
 module.exports = function requireware () {
   var bases = Array.prototype.slice.call(arguments);
-  var cache = new Tempfile(), cached = false;
+  var cache = temp.openSync('requireware'), cachedreq = null;
 
   function refresh (req) {
+    console.error('Refreshing requireware cache...');
+
     var scripts = {};
     bases.forEach(function (base) {
       var localbase = path.join(base, path.join('/', req.path));
@@ -41,16 +44,25 @@ module.exports = function requireware () {
           }
         });
     });
-    cache.writeFileSync('require && (require.content = (' + codifyJSON(scripts) + ')) && require._isReady(' + JSON.stringify(req.path) + ');', 'utf-8');
+    fs.writeFileSync(cache.path, 'require && (require.content = (' + codifyJSON(scripts) + ')) && require._isReady(' + JSON.stringify(req.path) + ');', 'utf-8');
   }
+
+  // Watch for file changes.
+  bases.forEach(function (base) {
+    watchTree(base, function () {
+      if (cachedreq) {
+        refresh(cachedreq);
+      }
+    });
+  });
 
   return function (req, res, next) {
     if (req.path.charAt(req.path.length - 1) == '/') {
       res.setHeader('Content-Type', 'text/javascript');
       if ('source' in req.query) {
-        if (!cached) {
+        if (!cachedreq) {
+          cachedreq = req;
           refresh(req);
-          cached = true;
         }
         send(req, cache.path).pipe(res);
       } else {
