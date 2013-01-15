@@ -10,7 +10,8 @@
     "express": "~3.0.6",
     "send": "~0.1.0",
     "wrench": "~1.4.4",
-    "uglify-js": "~2.2.3"
+    "uglify-js": "~2.2.3",
+    "temp": "~0.5.0"
   },
   "repository": "https://github.com/tcr/requireware",
   "author": "Tim Cameron Ryan",
