@@ -4,7 +4,7 @@ var fs = require('fs')
   , wrench = require("wrench")
   , url = require('url')
   , UglifyJS = require("uglify-js")
-  , temp = require('temp')
+  , Tempfile = require('temporary/lib/file')
   , watchTree = require("fs-watch-tree").watchTree;
 
 function codifyJSON (obj) {
@@ -13,7 +13,7 @@ function codifyJSON (obj) {
 
 module.exports = function requireware () {
   var bases = Array.prototype.slice.call(arguments);
-  var cache = temp.openSync('requireware'), cachedreq = null;
+  var cache = new Tempfile(), cachedreq = null;
 
   function refresh (req) {
     console.error('Refreshing requireware cache...');
@@ -44,7 +44,7 @@ module.exports = function requireware () {
           }
         });
     });
-    fs.writeFileSync(cache.path, 'require && (require.content = (' + codifyJSON(scripts) + ')) && require._isReady(' + JSON.stringify(req.path) + ');', 'utf-8');
+    cache.writeFileSync('require && (require.content = (' + codifyJSON(scripts) + ')) && require._isReady(' + JSON.stringify(req.path) + ');', 'utf-8');
   }
 
   // Watch for file changes.

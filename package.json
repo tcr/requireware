@@ -1,6 +1,6 @@
 {
   "name": "requireware",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple middleware to provide asynchronous require() script loading in the browser.",
   "main": "index.js",
   "directories": {
@@ -12,7 +12,7 @@
     "wrench": "~1.4.4",
     "uglify-js": "~2.2.3",
     "fs-watch-tree": "~0.2.2",
-    "temp": "~0.5.0"
+    "temporary": "0.0.5"
   },
   "repository": "https://github.com/tcr/requireware",
   "author": "Tim Cameron Ryan",
