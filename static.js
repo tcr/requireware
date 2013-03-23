@@ -21,17 +21,29 @@
     return promise;
   }
 
-  var require = function (path) {
+  var require = function (path, pathname, throwErrors) {
+    // Normalize relative paths.
+    if (pathname) {
+      path = path.replace(/^\.\//, pathname.replace(/^\//, '').replace(/\/[^\/]+$/, '') + '/').replace(/\/$/, '');
+    }
+    
     if (require.exports[path]) {
       return require.exports[path];
     }
     if (require.content[path] == null) {
       if (!path.match(/\.js$/)) {
-        return require(path + '.js');
+        return require(path + '.js', pathname, false) || require(path + '/index.js', pathname);
+      }
+      if (throwErrors === false) {
+        return null;
       }
       throw new Error('Error: Cannot find module ' + JSON.stringify(path));
     }
-    return require.exports[path] = window.eval(require.content[path] || "null");
+
+    // Exports object and evaluate.
+    require.exports[path] = require.exportsobject = {};
+    window.eval(require.content[path] || "null");
+    return require.exports[path];
   };
   require.exports = {};
   var onready = promise();

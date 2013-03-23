@@ -40,7 +40,9 @@ module.exports = function requireware () {
             } catch (e) {
               scriptsrc = 'throw new SyntaxError(' + codifyJSON(e.message + " at line " + e.line + ", col " + e.col) + ');';
             }
-            scripts[localpath.replace(/^\//, '')] = '(function () { var exports={}; ' + scriptsrc  + '\nreturn exports; })()\n//@ sourceURL=' + scripturl;
+
+            var localizedpath = localpath.replace(/^\//, '');
+            scripts[localizedpath] = '(function () { var exports=window.require.exportsobject; var require=function (arg) { return window.require.call(this, arg, ' + JSON.stringify(localpath) + '); }; for (var _ in window.require) { require[_] = window.require[_]; }; ' + scriptsrc  + '\nwindow.require.exports[' + JSON.stringify(localizedpath) + '] = exports; })()\n//@ sourceURL=' + scripturl;
           }
         });
     });
